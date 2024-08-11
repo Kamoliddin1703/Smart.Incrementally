@@ -1,5 +1,6 @@
-from pydantic import BaseModel # type: ignore
+from pydantic import BaseModel, EmailStr, Field # type: ignore
 from typing import Optional
+from datetime import datetime
 
 # Схема для создания и отображения рекламы
 class AdBase(BaseModel):
@@ -56,6 +57,28 @@ class VideoCreate(VideoBase):
 
 class Video(VideoBase):
     id: int
+
+    class Config:
+        orm_mode = True
+
+# Схема для пользователей
+class UserBase(BaseModel):
+    username: str
+    email: EmailStr
+    # Новые поля
+    birthdate: Optional[datetime] = None
+    gender: Optional[str] = None
+    phone_number: Optional[str] = None
+    secondary_email: Optional[EmailStr] = None
+    region: Optional[str] = None
+    birthplace: Optional[str] = None
+
+class UserCreate(UserBase):
+    password: str
+
+class User(UserBase):
+    id: int
+    is_active: bool
 
     class Config:
         orm_mode = True
